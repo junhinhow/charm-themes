@@ -4,6 +4,8 @@ Unified theming system for [charmbracelet](https://github.com/charmbracelet) lib
 
 Define a color palette once, use it everywhere — lipgloss, glamour, bubbles.
 
+> **[Leia em Portugues](README.pt-br.md)**
+
 ## The Problem
 
 Each charmbracelet library has its own styling system:
