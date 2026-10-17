@@ -2,21 +2,21 @@ package charmthemes
 
 import "charm.land/lipgloss/v2"
 
-// LipglossStyles provides pre-built lipgloss styles derived from a Theme.
+// LipglossStyles reúne os estilos de lipgloss derivados de um Theme.
 type LipglossStyles struct {
-	// Base text styles
-	Base    lipgloss.Style
-	Bold    lipgloss.Style
-	Italic  lipgloss.Style
-	Faint   lipgloss.Style
+	// Estilos de texto.
+	Base   lipgloss.Style
+	Bold   lipgloss.Style
+	Italic lipgloss.Style
+	Faint  lipgloss.Style
 
-	// Semantic styles
+	// Estilos semânticos.
 	Success lipgloss.Style
 	Warning lipgloss.Style
 	Error   lipgloss.Style
 	Info    lipgloss.Style
 
-	// UI component styles
+	// Estilos de componentes de interface.
 	Title     lipgloss.Style
 	Subtitle  lipgloss.Style
 	Highlight lipgloss.Style
@@ -24,7 +24,12 @@ type LipglossStyles struct {
 	Code      lipgloss.Style
 }
 
-// Lipgloss returns a set of lipgloss styles derived from the theme.
+// Lipgloss devolve um conjunto de estilos de lipgloss derivados do tema.
+//
+// Cada chamada constrói 13 estilos de lipgloss. Chame o método uma única vez
+// e reutilize o resultado, em vez de chamá-lo dentro do laço de renderização:
+//
+//	styles := theme.Lipgloss() // uma vez, na inicialização
 func (t Theme) Lipgloss() LipglossStyles {
 	return LipglossStyles{
 		Base:   lipgloss.NewStyle().Foreground(t.Foreground),
