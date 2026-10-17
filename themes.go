@@ -1,8 +1,13 @@
 package charmthemes
 
-import "charm.land/lipgloss/v2"
+import (
+	"sort"
+	"strings"
 
-// Built-in themes.
+	"charm.land/lipgloss/v2"
+)
+
+// Temas embutidos no pacote.
 var (
 	Gruvbox    = gruvboxTheme()
 	Dracula    = draculaTheme()
@@ -11,15 +16,58 @@ var (
 	TokyoNight = tokyoNightTheme()
 )
 
-// Themes returns all built-in themes indexed by name.
+// builtinThemes indexa os temas embutidos pelo nome.
+//
+// Os ponteiros apontam para as variáveis globais; Themes e Get devolvem cópias
+// dos valores, de modo que customizar um tema devolvido não afete o processo
+// inteiro.
+var builtinThemes = map[string]*Theme{
+	"gruvbox":     &Gruvbox,
+	"dracula":     &Dracula,
+	"nord":        &Nord,
+	"catppuccin":  &Catppuccin,
+	"tokyo-night": &TokyoNight,
+}
+
+// Themes devolve todos os temas embutidos, indexados pelo nome.
+//
+// Os temas devolvidos são cópias: customizar o valor devolvido não altera os
+// temas globais do pacote.
 func Themes() map[string]*Theme {
-	return map[string]*Theme{
-		"gruvbox":    &Gruvbox,
-		"dracula":    &Dracula,
-		"nord":       &Nord,
-		"catppuccin": &Catppuccin,
-		"tokyo-night": &TokyoNight,
+	temas := make(map[string]*Theme, len(builtinThemes))
+	for nome, tema := range builtinThemes {
+		copia := *tema
+		temas[nome] = &copia
 	}
+	return temas
+}
+
+// Get devolve o tema embutido com o nome informado.
+//
+// A busca ignora maiúsculas, minúsculas e espaços nas pontas. O segundo
+// retorno indica se o tema existe. O tema devolvido é uma cópia e pode ser
+// modificado com segurança.
+func Get(name string) (*Theme, bool) {
+	chave := strings.ToLower(strings.TrimSpace(name))
+	tema, ok := builtinThemes[chave]
+	if !ok {
+		return nil, false
+	}
+	copia := *tema
+	return &copia, true
+}
+
+// ThemeNames devolve os nomes dos temas embutidos em ordem alfabética.
+//
+// A ordenação é determinística, ao contrário da iteração sobre o mapa
+// devolvido por Themes.
+func ThemeNames() []string {
+	nomes := make([]string, 0, len(builtinThemes))
+	for nome := range builtinThemes {
+		nomes = append(nomes, nome)
+	}
+	sort.Strings(nomes)
+	return nomes
 }
 
 func gruvboxTheme() Theme {
